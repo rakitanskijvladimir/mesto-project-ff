@@ -1,15 +1,16 @@
-import { initialCards } from "./cards.js"; // импортирую данные в файл cards1
-import { openModal, closeModal, handleEscapeClose } from "../components/modal.js"; // импортирую данные в папку components, файл cards1
-import { createCard, addCard } from "../components/card.js"; // импортирую данные в папку components, файл cards2
-import '../pages/index.css'; // импортирую css файл
-
-// создаю переменные для работы с проектом
+import { initialCards } from "./cards.js";
+import { handleEscapeClose, closeModal } from "../components/modal.js";
+import { createCard, deleteCard } from "../components/card.js";
+import '../pages/index.css';
 const profileEditButton = document.querySelector('.profile__edit-button');
 const profileAddButton = document.querySelector('.profile__add-button');
 const profileName = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 const editProfilePopup = document.getElementById('editProfilePopup');
 const addCardPopup = document.getElementById('addCardPopup');
+const imagePopup = document.getElementById('imagePopup'); 
+const popupImage = imagePopup.querySelector('.popup__image');
+const popupCaption = imagePopup.querySelector('.popup__caption');
 const placesList = document.querySelector('.places__list');
 const editProfileForm = document.getElementById('editProfileForm');
 const addCardForm = document.getElementById('addCardForm');
@@ -18,58 +19,60 @@ const profileJobInput = editProfileForm.querySelector('.popup__input_type_descri
 const cardNameInput = addCardForm.querySelector('.popup__input_type_card-name');
 const cardLinkInput = addCardForm.querySelector('.popup__input_type_url');
 
+function addCard(cardData, placesList, handleCardClick, handleDeleteCard, handleLikeClick) { 
+    const cardElement = createCard(cardData, handleCardClick, handleDeleteCard, handleLikeClick); 
+    placesList.prepend(cardElement); 
+  }
 
+function handleCardClick(link, alt, name) {  popupImage.src = link;
+  popupImage.alt = alt;  popupCaption.textContent = name;
+  openModal(imagePopup);
+}
 
-// при клике открываю мод окно (редактирование) со значением указанном в переменных
+function openModal(popup) {
+  popup.classList.add('popup_is-opened');
+  document.addEventListener('keydown', handleEscapeClose);
+}
 profileEditButton.addEventListener('click', () => {
-    profileNameInput.value = profileName.textContent;
-    profileJobInput.value = profileDescription.textContent;
-    openModal(editProfilePopup);
+  profileNameInput.value = profileName.textContent;  profileJobInput.value = profileDescription.textContent;
+  openModal(editProfilePopup);
 });
 
-// при клике открываю мод окно (добавление)
 profileAddButton.addEventListener('click', () => {
-    openModal(addCardPopup);
+  openModal(addCardPopup);
 });
 
-//
 editProfileForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    profileName.textContent = profileNameInput.value;
-    profileDescription.textContent = profileJobInput.value;
-    closeModal(editProfilePopup);
+  evt.preventDefault();  profileName.textContent = profileNameInput.value;
+  profileDescription.textContent = profileJobInput.value;  closeModal(editProfilePopup);
 });
 
-//при клике открываю мод окно (добавление) вношу данные карточек и отправляю на сохранение
-addCardForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    const newCardData = {
-        name: cardNameInput.value,
-        link: cardLinkInput.value,
-    };
-    addCard(newCardData, placesList);
-    cardNameInput.value = '';
-    cardLinkInput.value = '';
-    closeModal(addCardPopup);
-});
-
-// закрываю мод окно и картику кликом рядом
-  const closeModalOut = (popup) => {
-    popup.classList.remove('popup_is-opened')
+addCardForm.addEventListener('submit', (evt) => {  evt.preventDefault();
+  const newCardData = {    name: cardNameInput.value,
+    link: cardLinkInput.value,  
 };
-  const setCloseListener = () => {
+  addCard(newCardData, placesList, handleCardClick, deleteCard);  
+  cardNameInput.value = '';  cardLinkInput.value = '';
+  closeModal(addCardPopup);
+});
+
+const closeModalOut = (popup) => { 
+     closeModal(popup);
+};
+
+const setCloseListener = () => {  
     const popupList = Array.from(document.querySelectorAll('.popup'));
-
-    popupList.forEach((popup) => {
-        popup.addEventListener('click', (event) => {
-            if(event.target.classList.contains('popup') || event.target.classList.contains('popup__close'))
-            closeModalOut(popup);
-        })
-    })
+  popupList.forEach((popup) => {    
+    popup.addEventListener('click', (event) => {
+      if (event.target.classList.contains('popup') || event.target.classList.contains('popup__close')) {
+        closeModalOut(popup);      
+    }
+    });  
+});
 };
+
 setCloseListener();
 
-//добавляю карточки
-initialCards.forEach((cardData) => {
-    addCard(cardData, placesList);
+initialCards.forEach((cardData) => { 
+     addCard(cardData, placesList, handleCardClick, deleteCard); 
 });
