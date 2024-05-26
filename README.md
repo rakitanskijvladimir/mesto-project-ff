@@ -2,4 +2,4 @@
 
 https://github.com/rakitanskijvladimir/mesto-project-ff.git
 
-Сборку пересобрал, устранил ошибки.
+Пришлось переписать код, устранил все рание замечания
