@@ -1,88 +1,79 @@
+export function enableValidation(config) {
+  const forms = document.querySelectorAll(config.formSelector);
+  forms.forEach(form => {
+      form.addEventListener('submit', function(event) {
+          event.preventDefault();
+      });
 
-
-export function validation(form) {
-  function removeError(input) {
-    const parent = input.parentNode;
-
-    if (parent.classList.contains("error")) {
-      parent.querySelector(".error-label").remove();
-      parent.classList.remove("error");
-    }
-  }
-  function createError(input, text) {
-    const parent = input.parentNode;
-    const errorLabel = document.createElement("label");
-
-    errorLabel.classList.add("error-label");
-    errorLabel.textContent = text;
-
-    parent.classList.add("error");
-    parent.append(errorLabel);
-  }
-
-  let result = true;
-
-  const allInputs = form.querySelectorAll("input");
-
-  for (const input of allInputs) {
-    removeError(input);
-
-    if (input.dataset.minLength) {
-
-      if (input.value.length < input.dataset.minLength) {
-        removeError(input)
-        createError(input, `Минимальное количество символов: ${input.dataset.minLength}`);
-        result = false;
-      }
-    }
-
-    if (input.dataset.maxLength) {
-      if (input.value.length > input.dataset.maxLength) {
-        removeError(input)
-        createError(input, `Максимальное количество символов: ${input.dataset.maxLength}`);
-        result = false;
-      }
-    }
-
-    if (input.dataset.required == 'true') {
-      if (input.value == "") {
-        removeError(input)
-        createError(input, " поле не заполнено");
-        result = false;
-      }
-    }
-
-  }
-
-  return result;
+      setEventListeners(form, config);
+  });
 }
 
+function setEventListeners(form, config) {
+  const inputs = form.querySelectorAll(config.inputSelector);
+  const submitButton = form.querySelector(config.submitButtonSelector);
 
-  // /^[a-zA-Zа-яА-ЯёЁ\- ]+$/
-
+  inputs.forEach(input => {
+      input.addEventListener('input', () => {
+          checkInputValidity(form, input, config);
+          toggleButtonState(inputs, submitButton, config);
+      });
+  });
   
+  toggleButtonState(inputs, submitButton, config);
+}
 
-  export function validateProfile(profilePopup) {
-   
-    function enableValidation(selectors) {
-      const popupInput = profilePopup.querySelector(selectors.inputSelector)
-      popupInput.addEventListener('keydown', () => {
-       
-        console.log(popupInput.value)
-      })
-      
-
-    }
-    enableValidation({
-      formSelector: '.popup__form',
-      inputSelector: '.popup__input',
-      submitButtonSelector: '.popup__button',
-      inactiveButtonClass: 'popup__button_disabled',
-      inputErrorClass: 'popup__input_type_error',
-      errorClass: 'popup__error_visible'
-    });
+function checkInputValidity(form, input, config) {
+  const errorElement = form.querySelector(`#${input.id}-error`);
+  if (input.validity.patternMismatch) {
+      input.setCustomValidity(input.dataset.errorMessage);
+  } else {
+      input.setCustomValidity("");
   }
 
+  if (!input.validity.valid) {
+      showInputError(form, input, input.validationMessage, config);
+  } else {
+      hideInputError(form, input, config);
+  }
+}
 
+function showInputError(form, input, errorMessage, config) {
+  const errorElement = form.querySelector(`#${input.id}-error`);
+  input.classList.add(config.inputErrorClass);
+  errorElement.textContent = errorMessage;
+  errorElement.classList.add(config.errorClass);
+}
 
- 
+function hideInputError(form, input, config) {
+  const errorElement = form.querySelector(`#${input.id}-error`);
+  input.classList.remove(config.inputErrorClass);
+  errorElement.textContent = '';
+  errorElement.classList.remove(config.errorClass);
+}
+
+function toggleButtonState(inputs, button, config) {
+  if (hasInvalidInput(inputs)) {
+      button.classList.add(config.inactiveButtonClass);
+      button.disabled = true;
+  } else {
+      button.classList.remove(config.inactiveButtonClass);
+      button.disabled = false;
+  }
+}
+
+function hasInvalidInput(inputs) {
+  return Array.from(inputs).some(input => !input.validity.valid);
+}
+
+export function clearValidation(form, config) {
+  const inputs = form.querySelectorAll(config.inputSelector);
+  const submitButton = form.querySelector(config.submitButtonSelector);
+  
+  inputs.forEach(input => {
+      hideInputError(form, input, config);
+      input.value = '';
+  });
+
+  toggleButtonState(inputs, submitButton, config);
+}

@@ -37,6 +37,11 @@ const initialCards = () => {
   return httpClient.get("/cards");
 };
 
+// Чтобы получить данные профиля, отправьте GET-запрос:
+const fetchProfile = () => {
+  return httpClient.get("/users/me")
+}
+
 // Чтобы обновить карточку, отправьте PATCH-запрос:
 const editProfile = (body) => {
   return httpClient.patch("/users/me", body);
@@ -62,10 +67,10 @@ const addNewCard = (body) => {
   return httpClient.post("/cards", body)
 }
 
-// Чтобы обновить аватар, отправьте PATCH-запрос:
 const updateAvatar = (body) => {
-  return httpClient.patch("/users/me/avatar", body)
+  return httpClient.patch("/users/me/avatar", body);
 }
+
 
 export const api = {
   initialCards,
@@ -74,5 +79,6 @@ export const api = {
   likeCard,
   dislikeCard,
   addNewCard,
-  updateAvatar
-}
+  updateAvatar,
+  fetchProfile
+};
