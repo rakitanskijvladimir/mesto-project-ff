@@ -67,12 +67,13 @@ const addNewCard = (body) => {
   return httpClient.post("/cards", body)
 }
 
+// Чтобы сменить аватар отправьте запрос
 const updateAvatar = (body) => {
   return httpClient.patch("/users/me/avatar", body);
 }
 
-
-export const api = {
+// объект api в котором есть все методы
+export const api = {  
   initialCards,
   editProfile,
   deleteCard,
@@ -80,5 +81,5 @@ export const api = {
   dislikeCard,
   addNewCard,
   updateAvatar,
-  fetchProfile
+  fetchProfile,
 };
