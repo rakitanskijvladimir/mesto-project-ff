@@ -17,19 +17,11 @@ export function createCard(profile, cardData, handleCardClick, handleDeleteCard,
   }
 
   likeButton.addEventListener("click", () => {
-<<<<<<< HEAD
     handleLikeClick(cardData, likeButton, counterLike)
   });
 
   deleteButton.addEventListener("click", () => {
     handleDeleteCard(cardElement, cardData);
-=======
-    handleLikeClick(likeButton, counterLike)
-  });
-
-  deleteButton.addEventListener("click", () => {
-    handleDeleteCard(cardElement, cardData._id);
->>>>>>> 72b4ba7c04085ab0728eff24929d81aea2415ed9
   });
 
   cardImage.addEventListener("click", () => {
