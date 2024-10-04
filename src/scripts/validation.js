@@ -1,10 +1,10 @@
+
 export function enableValidation(config) {
   const forms = document.querySelectorAll(config.formSelector);
   forms.forEach(form => {
       form.addEventListener('submit', function(event) {
           event.preventDefault();
-      });
-
+      })
       setEventListeners(form, config);
   });
 }
@@ -19,7 +19,6 @@ function setEventListeners(form, config) {
           toggleButtonState(inputs, submitButton, config);
       });
   });
-  
   toggleButtonState(inputs, submitButton, config);
 }
 
@@ -30,7 +29,6 @@ function checkInputValidity(form, input, config) {
   } else {
       input.setCustomValidity("");
   }
-
   if (!input.validity.valid) {
       showInputError(form, input, input.validationMessage, config);
   } else {
@@ -74,6 +72,5 @@ export function clearValidation(form, config) {
       hideInputError(form, input, config);
       input.value = '';
   });
-
   toggleButtonState(inputs, submitButton, config);
 }

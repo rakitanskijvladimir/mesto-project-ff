@@ -1,7 +1,7 @@
 const config = {
-  baseUrl: "https://nomoreparties.co/v1/wff-cohort-15",
+  baseUrl: "https://nomoreparties.co/v1/wff-cohort-24",
   headers: {
-    authorization: "a9ef450b-94b1-4a4f-8bad-6859832fd472",
+    authorization: "d214c210-90f6-44d6-aff0-19161a961de5",
     "Content-Type": "application/json",
   },
 };
@@ -67,12 +67,13 @@ const addNewCard = (body) => {
   return httpClient.post("/cards", body)
 }
 
+// Чтобы сменить аватар отправьте запрос
 const updateAvatar = (body) => {
   return httpClient.patch("/users/me/avatar", body);
 }
 
-
-export const api = {
+// объект api в котором есть все методы
+export const api = {  
   initialCards,
   editProfile,
   deleteCard,
@@ -80,5 +81,5 @@ export const api = {
   dislikeCard,
   addNewCard,
   updateAvatar,
-  fetchProfile
+  fetchProfile,
 };
