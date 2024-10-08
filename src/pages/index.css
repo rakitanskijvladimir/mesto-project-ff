@@ -13,6 +13,8 @@
 
 
 .popup__error {
+    position: fixed;
+    display: flex;
     color: red;
     font-size: 12px;
     margin-top: 5px;

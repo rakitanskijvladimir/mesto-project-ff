@@ -1,4 +1,8 @@
-export function createCard(profile, cardData, handleCardClick, handleDeleteCard, handleLikeClick) {
+// реструктуризировал код через объекты
+export function createCard({profile, cardData, handleCardClick, handleDeleteCard, handleLikeClick}) {
+// еще вариант 
+// export function createCard(args) {
+// const {profile, cardData, handleCardClick, handleDeleteCard, handleLikeClick} = args; 
   const cardTemplate = document.getElementById("card-template");
   const cardElement = cardTemplate.content.cloneNode(true).firstElementChild;
   const cardImage = cardElement.querySelector(".card__image");
@@ -11,7 +15,7 @@ export function createCard(profile, cardData, handleCardClick, handleDeleteCard,
   cardImage.alt = cardData.name;
   cardTitle.textContent = cardData.name;
   counterLike.textContent = cardData.likes.length
-  // проверяю карточки на лайки и сравниваю свои карточки с не своиими, ставлю только не своим
+  // проверяю карточки на лайки и сравниваю свои карточки с не своими, ставлю только не своим
   if (cardData.likes.findIndex((like) => like._id === profile._id) !== -1 ){
     likeButton.classList.add('card__like-button_is-active')
   }
