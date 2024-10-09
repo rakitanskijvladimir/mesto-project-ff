@@ -65,7 +65,7 @@ function addCard({
   handleCardClick,
   handleDeleteCard,
   handleLikeClick,
-}) {
+}, method = "prepend") {
   const cardElement = createCard({
     profile: PROFILE,
     cardData,
@@ -74,7 +74,7 @@ function addCard({
     handleLikeClick,
   });
   // добавление происходит в начало страницы
-  placesList.append(cardElement);
+  placesList[method](cardElement);
 }
 
 // создаю функцию для получения данных по карточками (link, alt, name)
